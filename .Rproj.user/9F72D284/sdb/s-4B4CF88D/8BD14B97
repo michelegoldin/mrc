@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#devtools::install_github(\"jvcasillas/untidydata\")\n#devtools::install_github(\"yihui/xaringan\")\nlibrary(untidydata)\nlibrary(xaringan)\nlibrary(plot3D)\nlibrary(tidyverse)\n\n#2. Load language diversity dataset\n#3 explore variables, tody (long to wide)\n\nstr(language_diversity)\nhead(language_diversity)\nunique(language_diversity$Measurement)\n\nld <- language_diversity%>%\n  filter(., Continent == 'Africa')%>%\n  spread(., Measurement, Value)%>%\n  select(., country = Country, pop = Population, area = Area, lang = Langs)%>%\n  mutate(., logArea = log(area), logPop = log(pop))\n  \n#4. Check normality, trasnform, plot\n\nhist(log(ld$area))\nhist(log(ld$pop))     \n\nld %>%\n  ggplot(., aes(x=logPop, y =lang, color = logArea))+\n  geom_point()\n\n#5 Fit model (MRC, 3 parameters)\nmy_mod <- lm(lang ~ logPop + logArea, data = ld)\nsummary(my_mod)\n\nmy_int <- lm(lang ~ logPop + logArea + logPop:logArea, data = ld)\nsummary(my_int)\n\n#6. Convert to an html presentation\n",
+    "created" : 1519748949883.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4259314807",
+    "id" : "8BD14B97",
+    "lastKnownWriteTime" : 1519751400,
+    "last_content_update" : 1519751400817,
+    "path" : "~/Desktop/mrc/scripts/myscript.R",
+    "project_path" : "scripts/myscript.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
